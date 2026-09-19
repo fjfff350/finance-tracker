@@ -65,7 +65,6 @@
   }
   .app.hidden { display:none; }
 
-  /* WELCOME */
   #welcome {
     display:none;
     flex-direction:column;
@@ -228,6 +227,124 @@
   .tab-pane { display:none; }
   .tab-pane.active { display:block; }
 
+  /* WALLET CARD — новая главная карточка */
+  .wallet-card {
+    background:linear-gradient(135deg, var(--bg2), var(--bg3));
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px 24px;
+    margin-bottom:16px;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .wallet-card:hover {
+    border-color:var(--border2);
+    transform:translateY(-1px);
+    box-shadow:0 8px 20px -8px rgba(0,0,0,.4);
+  }
+  .wallet-card::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--accent), var(--orange));
+  }
+  .wallet-card.negative::before {
+    background:linear-gradient(90deg, var(--red), var(--red2));
+  }
+  .wallet-head {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .wallet-label {
+    font-size:12px;
+    font-weight:700;
+    color:var(--text2);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:8px;
+  }
+  .wallet-mode {
+    display:inline-flex;
+    gap:2px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2px;
+    margin-top:2px;
+  }
+  .wallet-mode-btn {
+    padding:4px 10px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:700;
+    color:var(--text3);
+    transition:.15s;
+    letter-spacing:.3px;
+  }
+  .wallet-mode-btn:hover { color:var(--text2); }
+  .wallet-mode-btn.active {
+    background:var(--accent);
+    color:#0d1117;
+  }
+  .wallet-edit {
+    width:34px; height:34px;
+    border-radius:10px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    transition:.15s;
+    flex-shrink:0;
+  }
+  .wallet-edit:hover {
+    background:var(--bg3);
+    border-color:var(--border2);
+  }
+  .wallet-value {
+    font-size:44px;
+    font-weight:900;
+    letter-spacing:-1.5px;
+    font-variant-numeric:tabular-nums;
+    line-height:1.1;
+    margin-bottom:10px;
+  }
+  .wallet-value.positive { color:var(--green2); }
+  .wallet-value.negative { color:var(--red2); }
+  .wallet-value.zero { color:var(--text); }
+  .wallet-breakdown {
+    font-size:13px;
+    color:var(--text3);
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .wallet-breakdown b {
+    color:var(--text2);
+    font-weight:700;
+  }
+  .wallet-breakdown .sep {
+    width:3px; height:3px;
+    border-radius:50%;
+    background:var(--text3);
+    display:inline-block;
+  }
+  .wallet-hint {
+    font-size:11.5px;
+    color:var(--text3);
+    margin-top:8px;
+    font-style:italic;
+    opacity:.8;
+  }
+
   /* MONTH NAV */
   .month-nav {
     display:flex;
@@ -313,7 +430,6 @@
     background:var(--red);
   }
 
-  /* PANELS */
   .grid-2 {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -347,7 +463,6 @@
     font-weight:500;
   }
 
-  /* CHART */
   .chart-wrap {
     position:relative;
     width:100%;
@@ -584,7 +699,6 @@
     flex-shrink:0;
   }
 
-  /* Empty states */
   .empty-hero {
     text-align:center;
     padding:60px 24px;
@@ -641,7 +755,6 @@
     box-shadow:0 12px 30px rgba(240,180,41,.45), 0 2px 6px rgba(0,0,0,.4);
   }
 
-  /* TX LIST */
   .tx-list {
     display:flex;
     flex-direction:column;
@@ -739,7 +852,6 @@
     border-color:var(--accent);
   }
 
-  /* BUDGET */
   .budget-list {
     display:flex;
     flex-direction:column;
@@ -779,7 +891,6 @@
   .budget-fill.warn { background:var(--accent); }
   .budget-fill.over { background:var(--red); }
 
-  /* MODAL */
   .modal-overlay {
     position:fixed;
     inset:0;
@@ -1034,7 +1145,6 @@
   @media (max-width: 720px) {
     .app { padding:14px 12px 110px; }
     .summary { grid-template-columns:1fr 1fr; gap:8px; }
-    .summary .card:first-child { grid-column:1/-1; }
     .card-value { font-size:19px; }
     .grid-2 { grid-template-columns:1fr; }
     .cat-grid { grid-template-columns:repeat(3, 1fr); }
@@ -1042,6 +1152,9 @@
     .tab-count { display:none; }
     .goal-head { flex-direction:column; }
     .recurring-card { flex-wrap:wrap; }
+    .wallet-value { font-size:34px; }
+    .wallet-card { padding:18px; }
+    .wallet-breakdown { font-size:12px; }
   }
 </style>
 </head>
@@ -1057,18 +1170,18 @@
   <div class="welcome-steps">
     <div class="welcome-step">
       <div class="welcome-step-num">1</div>
-      <div class="welcome-step-text">Нажми <b>«+ Добавить»</b> — запиши первую операцию</div>
+      <div class="welcome-step-text">Укажи <b>сколько у тебя денег сейчас</b> — чтобы трекер знал старт</div>
     </div>
     <div class="welcome-step">
       <div class="welcome-step-num">2</div>
-      <div class="welcome-step-text">Открой вкладку <b>«Регулярные»</b> — настрой зарплату и аренду</div>
+      <div class="welcome-step-text">Нажми <b>«+ Добавить»</b> — записывай траты и доходы</div>
     </div>
     <div class="welcome-step">
       <div class="welcome-step-num">3</div>
       <div class="welcome-step-text">Создай <b>цель накоплений</b> — «100 000 на отпуск»</div>
     </div>
   </div>
-  <button class="welcome-btn" id="welcomeStart">Добавить первую операцию</button>
+  <button class="welcome-btn" id="welcomeStart">Начать — указать баланс</button>
 </div>
 
 <div class="app hidden" id="app">
@@ -1083,7 +1196,6 @@
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" data-tab="overview">
       📊 Обзор
@@ -1098,6 +1210,29 @@
 
   <!-- TAB: OVERVIEW -->
   <div class="tab-pane active" id="pane-overview">
+    <!-- НОВАЯ КАРТОЧКА «Сейчас в кошельке» -->
+    <div class="wallet-card" id="walletCard">
+      <div class="wallet-head">
+        <div>
+          <div class="wallet-label">Сейчас в кошельке</div>
+          <div class="wallet-mode" id="walletMode">
+            <button class="wallet-mode-btn active" data-mode="all">За всё время</button>
+            <button class="wallet-mode-btn" data-mode="month">За месяц</button>
+          </div>
+        </div>
+        <button class="wallet-edit" id="walletEdit" title="Скорректировать">✏️</button>
+      </div>
+      <div class="wallet-value" id="walletValue">0 ₽</div>
+      <div class="wallet-breakdown" id="walletBreakdown">
+        <span>Старт: <b>0</b></span>
+        <span class="sep"></span>
+        <span>+<b>0</b> доходы</span>
+        <span class="sep"></span>
+        <span>−<b>0</b> расходы</span>
+      </div>
+      <div class="wallet-hint" id="walletHint">Нажми ✏️ чтобы скорректировать</div>
+    </div>
+
     <div class="month-nav">
       <button id="prevMonth">←</button>
       <div class="month-label" id="monthLabel">Январь 2025</div>
@@ -1246,6 +1381,31 @@
   </div>
 </div>
 
+<!-- MODAL: Начальный баланс / Корректировка -->
+<div class="modal-overlay" id="balanceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="balanceModalTitle">Начальный баланс</div>
+      <button class="modal-close" id="balanceModalClose">✕</button>
+    </div>
+
+    <div id="balanceModalDesc" style="font-size:13.5px;color:var(--text2);line-height:1.55;margin-bottom:16px;">
+      Укажи, сколько у тебя денег <b>сейчас</b>. Трекер запомнит это как стартовую точку.
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" id="balanceAmountLabel">Сумма</label>
+      <input type="number" class="form-input" id="balanceAmount" placeholder="500" step="0.01" inputmode="decimal">
+    </div>
+
+    <div class="form-hint" id="balanceModalHint" style="margin-bottom:14px;">
+      Это не операция, а точка отсчёта. Позже можно править.
+    </div>
+
+    <button class="btn-primary" id="balanceSave">Сохранить</button>
+  </div>
+</div>
+
 <!-- MODAL: Goal -->
 <div class="modal-overlay" id="goalModal">
   <div class="modal">
@@ -1298,7 +1458,7 @@
   </div>
 </div>
 
-<!-- MODAL: Quick deposit to goal -->
+<!-- MODAL: Deposit to goal -->
 <div class="modal-overlay" id="depositModal">
   <div class="modal">
     <div class="modal-header">
@@ -1393,6 +1553,15 @@
     <div class="modal-header">
       <div class="modal-title">Настройки</div>
       <button class="modal-close" id="settingsModalClose">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Начальный баланс</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="flex:1;padding:11px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;" id="settingsInitialBalance">0 ₽</div>
+        <button class="btn-small" id="settingsEditBalanceBtn">Изменить</button>
+      </div>
+      <div class="form-hint">Это точка отсчёта. Меняй, если забыл записать что-то крупное.</div>
     </div>
 
     <div class="form-group">
@@ -1495,7 +1664,7 @@ function getCategory(type, id) {
 /* ============================================================
    ХРАНИЛИЩЕ
    ============================================================ */
-const STORAGE_KEY = 'finance_tracker_v3';
+const STORAGE_KEY = 'finance_tracker_v4';
 
 let state = {
   transactions: [],
@@ -1504,7 +1673,10 @@ let state = {
   goals: [],
   recurring: [],
   theme: 'auto',
-  autoCreatedMonths: {},  // { "2025-1": ['recurringId1', 'recurringId2'] }
+  initialBalance: 0,          // начальный баланс
+  initialBalanceSet: false,   // установлен ли (для онбординга)
+  walletMode: 'all',          // 'all' | 'month'
+  autoCreatedMonths: {},
 };
 
 function load() {
@@ -1516,6 +1688,8 @@ function load() {
       if (!state.goals) state.goals = [];
       if (!state.recurring) state.recurring = [];
       if (!state.autoCreatedMonths) state.autoCreatedMonths = {};
+      if (typeof state.initialBalance !== 'number') state.initialBalance = 0;
+      if (typeof state.walletMode !== 'string') state.walletMode = 'all';
     }
   } catch(e) { console.error('Load error', e); }
 }
@@ -1606,11 +1780,43 @@ function escapeHtml(s) {
 }
 
 /* ============================================================
-   РЕГУЛЯРНЫЕ — автоприменение
+   РАСЧЁТ БАЛАНСА
+   ============================================================ */
+function getAllTimeBalance() {
+  // Начальный + все доходы − все расходы (за всё время)
+  let income = 0, expense = 0;
+  state.transactions.forEach(t => {
+    if (t.type === 'income') income += t.amount;
+    else expense += t.amount;
+  });
+  return {
+    total: state.initialBalance + income - expense,
+    initial: state.initialBalance,
+    income,
+    expense,
+  };
+}
+
+function getMonthBalance() {
+  // Начальный + доходы месяца − расходы месяца
+  const list = getMonthTransactions();
+  let income = 0, expense = 0;
+  list.forEach(t => {
+    if (t.type === 'income') income += t.amount;
+    else expense += t.amount;
+  });
+  return {
+    total: state.initialBalance + income - expense,
+    initial: state.initialBalance,
+    income,
+    expense,
+  };
+}
+
+/* ============================================================
+   РЕГУЛЯРНЫЕ
    ============================================================ */
 function applyRecurringForMonth(year, month) {
-  // Проверяем каждую регулярную — если она должна сработать в этом месяце,
-  // и ещё не сработала — создаём операцию
   const key = `${year}-${month}`;
   if (!state.autoCreatedMonths[key]) state.autoCreatedMonths[key] = [];
   const created = state.autoCreatedMonths[key];
@@ -1620,17 +1826,14 @@ function applyRecurringForMonth(year, month) {
   state.recurring.forEach(rec => {
     if (created.includes(rec.id)) return;
 
-    // Проверяем, что месяц >= месяца начала
     const [startY, startM] = (rec.start || '2000-01').split('-').map(Number);
     const startMonthIdx = startM - 1;
     if (year < startY) return;
     if (year === startY && month < startMonthIdx) return;
 
-    // Определяем день (если день больше дней в месяце — берём последний день)
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const day = Math.min(rec.day || 1, daysInMonth);
 
-    // Создаём операцию
     state.transactions.push({
       id: uid(),
       type: rec.type,
@@ -1681,6 +1884,43 @@ function getFilteredTransactions() {
   return list.sort((a, b) => {
     if (a.date !== b.date) return a.date < b.date ? 1 : -1;
     return (a.time || '') < (b.time || '') ? 1 : -1;
+  });
+}
+
+/* ============================================================
+   РЕНДЕР: КОШЕЛЁК
+   ============================================================ */
+function renderWallet() {
+  const card = document.getElementById('walletCard');
+  const valueEl = document.getElementById('walletValue');
+  const breakdown = document.getElementById('walletBreakdown');
+
+  const data = state.walletMode === 'month' ? getMonthBalance() : getAllTimeBalance();
+
+  valueEl.textContent = fmt(data.total);
+  valueEl.className = 'wallet-value ' +
+    (data.total > 0 ? 'positive' : data.total < 0 ? 'negative' : 'zero');
+
+  card.classList.toggle('negative', data.total < 0);
+
+  const modeLabel = state.walletMode === 'month'
+    ? `за ${MONTHS[viewMonth].toLowerCase()}`
+    : 'за всё время';
+
+  breakdown.innerHTML = `
+    <span>Старт: <b>${fmt(data.initial, false)}</b></span>
+    <span class="sep"></span>
+    <span>+<b>${fmt(data.income, false)}</b> доходы</span>
+    <span class="sep"></span>
+    <span>−<b>${fmt(data.expense, false)}</b> расходы</span>
+  `;
+
+  document.getElementById('walletHint').textContent =
+    `Показано ${modeLabel}. Нажми ✏️ чтобы скорректировать.`;
+
+  // Кнопки режима
+  document.querySelectorAll('.wallet-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === state.walletMode);
   });
 }
 
@@ -1961,7 +2201,6 @@ function renderGoals() {
     const isDone = g.current >= g.target;
     const remaining = Math.max(0, g.target - g.current);
 
-    // Прогноз по дедлайну
     let forecast = '';
     if (g.deadline && g.monthly > 0 && !isDone) {
       const now = new Date();
@@ -2027,7 +2266,6 @@ function renderGoals() {
     `;
   }).join('');
 
-  // Кнопки
   list.querySelectorAll('button[data-action]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -2198,7 +2436,6 @@ function saveTransaction() {
   save();
   closeModal('txModal');
   renderAll();
-  hideWelcomeIfNeeded();
 }
 
 function deleteTransaction() {
@@ -2209,6 +2446,73 @@ function deleteTransaction() {
   closeModal('txModal');
   renderAll();
   toast('Операция удалена', 'success');
+}
+
+/* ============================================================
+   МОДАЛКА: Баланс (начальный + корректировка)
+   ============================================================ */
+let balanceMode = 'initial'; // 'initial' | 'correct'
+
+function openBalanceModal(mode = 'initial') {
+  balanceMode = mode;
+  const modal = document.getElementById('balanceModal');
+
+  if (mode === 'initial') {
+    document.getElementById('balanceModalTitle').textContent = 'Начальный баланс';
+    document.getElementById('balanceModalDesc').innerHTML =
+      'Укажи, сколько у тебя денег <b>сейчас</b>. Трекер запомнит это как точку отсчёта и будет считать остаток.';
+    document.getElementById('balanceAmountLabel').textContent = 'Сумма сейчас';
+    document.getElementById('balanceModalHint').innerHTML =
+      'Это не операция — просто стартовая сумма. Позже можно править.';
+    document.getElementById('balanceAmount').value = state.initialBalance || '';
+  } else {
+    // Корректировка — вводишь РЕАЛЬНУЮ сумму сейчас, трекер пересчитывает initialBalance
+    const current = state.walletMode === 'month'
+      ? getMonthBalance().total
+      : getAllTimeBalance().total;
+
+    document.getElementById('balanceModalTitle').textContent = 'Скорректировать баланс';
+    document.getElementById('balanceModalDesc').innerHTML =
+      'Введи, сколько у тебя денег <b>прямо сейчас</b>. Трекер сам подстроит начальный баланс, чтобы сойтись.';
+    document.getElementById('balanceAmountLabel').textContent = 'Сумма сейчас';
+    document.getElementById('balanceModalHint').innerHTML =
+      'Удобно, если забыл записать какую-то трату или доход.';
+    document.getElementById('balanceAmount').value = Math.round(current * 100) / 100;
+  }
+
+  document.getElementById('balanceModal').classList.add('active');
+  setTimeout(() => document.getElementById('balanceAmount').focus(), 200);
+}
+
+function saveBalance() {
+  const val = parseFloat(document.getElementById('balanceAmount').value);
+  if (isNaN(val)) {
+    toast('Введи сумму', 'error');
+    return;
+  }
+
+  if (balanceMode === 'initial') {
+    state.initialBalance = val;
+    state.initialBalanceSet = true;
+    save();
+    closeModal('balanceModal');
+    renderAll();
+    toast('Начальный баланс сохранён', 'success');
+  } else {
+    // Корректировка: считаем, какой должен быть initialBalance,
+    // чтобы текущий баланс стал равен val
+    const data = state.walletMode === 'month' ? getMonthBalance() : getAllTimeBalance();
+    // total = initial + income - expense
+    // Хотим: val = newInitial + income - expense
+    // => newInitial = val - income + expense
+    const newInitial = val - data.income + data.expense;
+    state.initialBalance = newInitial;
+    state.initialBalanceSet = true;
+    save();
+    closeModal('balanceModal');
+    renderAll();
+    toast('Баланс скорректирован', 'success');
+  }
 }
 
 /* ============================================================
@@ -2468,6 +2772,8 @@ function saveBudget() {
    ============================================================ */
 function openSettingsModal() {
   document.getElementById('currencySelect').value = state.currency;
+  document.getElementById('settingsInitialBalance').textContent = fmt(state.initialBalance);
+
   document.querySelectorAll('.theme-opt').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.themeOpt === (state.theme || 'auto'));
   });
@@ -2540,6 +2846,9 @@ function clearAll() {
     goals: [],
     recurring: [],
     theme: state.theme,
+    initialBalance: 0,
+    initialBalanceSet: false,
+    walletMode: 'all',
     autoCreatedMonths: {},
   };
   save();
@@ -2571,6 +2880,7 @@ function toast(msg, type = '') {
    ГЛАВНЫЙ РЕНДЕР
    ============================================================ */
 function renderAll() {
+  renderWallet();
   renderMonthLabel();
   renderSummary();
   renderPieChart();
@@ -2594,12 +2904,6 @@ function showApp() {
   document.getElementById('addBtn').classList.remove('hidden');
 }
 
-function hideWelcomeIfNeeded() {
-  if (state.transactions.length > 0) {
-    showApp();
-  }
-}
-
 /* ============================================================
    ВКЛАДКИ
    ============================================================ */
@@ -2611,7 +2915,6 @@ function switchTab(tabName) {
     p.classList.toggle('active', p.id === 'pane-' + tabName);
   });
 
-  // FAB видна только в Обзоре
   const fab = document.getElementById('addBtn');
   if (tabName === 'overview') fab.classList.remove('hidden');
   else fab.classList.add('hidden');
@@ -2625,6 +2928,29 @@ function switchTab(tabName) {
    ============================================================ */
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+});
+
+// Wallet mode switching
+document.getElementById('walletMode').addEventListener('click', e => {
+  const btn = e.target.closest('.wallet-mode-btn');
+  if (!btn) return;
+  e.stopPropagation();
+  state.walletMode = btn.dataset.mode;
+  save();
+  renderWallet();
+});
+
+// Wallet edit
+document.getElementById('walletEdit').addEventListener('click', e => {
+  e.stopPropagation();
+  openBalanceModal('correct');
+});
+
+// Wallet card click (whole card opens initial balance if not set yet)
+document.getElementById('walletCard').addEventListener('click', e => {
+  if (e.target.closest('.wallet-mode-btn') || e.target.closest('.wallet-edit')) return;
+  // Клик по карточке → корректировка
+  openBalanceModal('correct');
 });
 
 document.getElementById('prevMonth').addEventListener('click', () => {
@@ -2656,6 +2982,13 @@ document.querySelectorAll('.type-btn[data-type]').forEach(btn => {
 
 document.getElementById('txAmount').addEventListener('keydown', e => {
   if (e.key === 'Enter') saveTransaction();
+});
+
+// Balance modal
+document.getElementById('balanceModalClose').addEventListener('click', () => closeModal('balanceModal'));
+document.getElementById('balanceSave').addEventListener('click', saveBalance);
+document.getElementById('balanceAmount').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveBalance();
 });
 
 // Goals
@@ -2706,6 +3039,11 @@ document.getElementById('importFile').addEventListener('change', e => {
   e.target.value = '';
 });
 document.getElementById('clearBtn').addEventListener('click', clearAll);
+
+document.getElementById('settingsEditBalanceBtn').addEventListener('click', () => {
+  closeModal('settingsModal');
+  setTimeout(() => openBalanceModal('initial'), 150);
+});
 
 document.getElementById('currencySelect').addEventListener('change', e => {
   state.currency = e.target.value;
@@ -2761,7 +3099,7 @@ document.addEventListener('keydown', e => {
 
 document.getElementById('welcomeStart').addEventListener('click', () => {
   showApp();
-  setTimeout(() => openAddModal(), 100);
+  setTimeout(() => openBalanceModal('initial'), 100);
 });
 
 /* ============================================================
@@ -2771,20 +3109,20 @@ load();
 initViewDate();
 applyTheme();
 
-if (state.transactions.length > 0 || state.goals.length > 0 || state.recurring.length > 0) {
-  showApp();
-} else {
+// Показываем welcome, если данных нет И баланс не установлен
+if (state.transactions.length === 0 && !state.initialBalanceSet) {
   showWelcome();
+} else {
+  showApp();
 }
 
-// Подставляем регулярные за текущий отображаемый месяц
+// Подставляем регулярные за текущий месяц
 applyRecurringForMonth(viewYear, viewMonth);
 
 renderAll();
 renderGoals();
 renderRecurring();
 
-// Кнопки добавления в целях/регулярных — на месте
 document.getElementById('goalsCount').textContent = state.goals.length;
 document.getElementById('recurringCount').textContent = state.recurring.length;
 </script>
