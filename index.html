@@ -148,7 +148,6 @@
   .welcome-btn:hover { filter:brightness(1.08); transform:translateY(-2px); }
   .welcome-btn:active { transform:translateY(0) scale(.98); }
 
-  /* HEADER */
   .header {
     display:flex;
     justify-content:space-between;
@@ -185,8 +184,21 @@
     position:relative;
   }
   .icon-btn:hover { background:var(--bg3); border-color:var(--border2); }
+  .icon-btn.help::after {
+    content:'?';
+    position:absolute;
+    top:-2px; right:-2px;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#0d1117;
+    font-size:10px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-  /* TABS */
   .tabs {
     display:flex;
     gap:6px;
@@ -227,7 +239,7 @@
   .tab-pane { display:none; }
   .tab-pane.active { display:block; }
 
-  /* WALLET CARD — новая главная карточка */
+  /* WALLET */
   .wallet-card {
     background:linear-gradient(135deg, var(--bg2), var(--bg3));
     border:1px solid var(--border);
@@ -345,7 +357,6 @@
     opacity:.8;
   }
 
-  /* MONTH NAV */
   .month-nav {
     display:flex;
     align-items:center;
@@ -371,7 +382,6 @@
     letter-spacing:0.3px;
   }
 
-  /* SUMMARY */
   .summary {
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -558,7 +568,6 @@
   }
   .bars-wrap { padding-bottom:16px; }
 
-  /* GOALS */
   .goal-card {
     background:var(--bg2);
     border:1px solid var(--border);
@@ -643,7 +652,6 @@
     color:var(--green2);
   }
 
-  /* RECURRING */
   .recurring-card {
     background:var(--bg2);
     border:1px solid var(--border);
@@ -730,7 +738,6 @@
     font-size:14px;
   }
 
-  /* FAB */
   .fab {
     position:fixed;
     bottom:24px;
@@ -1142,6 +1149,186 @@
     box-shadow:0 1px 3px rgba(0,0,0,.15);
   }
 
+  /* ============================================================
+     ТУТОРИАЛ
+     ============================================================ */
+  #tourOverlay {
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:none;
+  }
+  #tourOverlay.active { display:block; }
+
+  #tourBackdrop {
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    transition:clip-path .35s cubic-bezier(.4,0,.2,1);
+  }
+
+  #tourCloneLayer {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:2;
+  }
+
+  .tour-clone {
+    position:absolute;
+    pointer-events:none;
+    box-shadow:
+      0 0 0 3px var(--accent),
+      0 0 0 10px rgba(240,180,41,.25),
+      0 0 40px 10px rgba(240,180,41,.45);
+    border-radius:16px;
+    animation:tourPulse 2s ease-in-out infinite;
+  }
+  .tour-clone > * { pointer-events:none; }
+
+  #tourSpotlight {
+    position:absolute;
+    border-radius:16px;
+    pointer-events:none;
+    display:none;
+    z-index:3;
+    animation:tourPulse 2s ease-in-out infinite;
+  }
+  #tourSpotlight.show { display:block; }
+
+  @keyframes tourPulse {
+    0%,100% {
+      box-shadow:
+        0 0 0 3px var(--accent),
+        0 0 0 10px rgba(240,180,41,.25),
+        0 0 40px 10px rgba(240,180,41,.45);
+    }
+    50% {
+      box-shadow:
+        0 0 0 3px var(--accent),
+        0 0 0 14px rgba(240,180,41,.4),
+        0 0 55px 15px rgba(240,180,41,.65);
+    }
+  }
+
+  #tourTooltip {
+    position:absolute;
+    max-width:340px;
+    background:var(--bg2);
+    border:1px solid var(--border2);
+    border-radius:16px;
+    padding:18px 20px 16px;
+    box-shadow:0 20px 50px rgba(0,0,0,.6);
+    transition:left .35s cubic-bezier(.4,0,.2,1), top .35s cubic-bezier(.4,0,.2,1);
+    z-index:4;
+  }
+  #tourTooltip::before {
+    content:'';
+    position:absolute;
+    width:12px; height:12px;
+    background:var(--bg2);
+    border:1px solid var(--border2);
+    transform:rotate(45deg);
+    z-index:0;
+    display:none;
+  }
+  #tourTooltip.arrow-top::before {
+    display:block;
+    top:-7px;
+    left:50%;
+    margin-left:-6px;
+    border-right:none;
+    border-bottom:none;
+  }
+  #tourTooltip.arrow-bottom::before {
+    display:block;
+    bottom:-7px;
+    left:50%;
+    margin-left:-6px;
+    border-left:none;
+    border-top:none;
+  }
+  #tourTooltip > * {
+    position:relative;
+    z-index:1;
+  }
+
+  .tour-step-num {
+    display:inline-block;
+    font-size:11px;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .tour-title {
+    font-size:17px;
+    font-weight:800;
+    margin-bottom:8px;
+    letter-spacing:-0.2px;
+  }
+  .tour-text {
+    font-size:14px;
+    color:var(--text2);
+    line-height:1.55;
+    margin-bottom:16px;
+  }
+  .tour-text b { color:var(--text); font-weight:700; }
+  .tour-text .accent { color:var(--accent); font-weight:800; }
+
+  .tour-actions {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .tour-progress {
+    display:flex;
+    gap:4px;
+  }
+  .tour-dot {
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--border2);
+    transition:.2s;
+  }
+  .tour-dot.active {
+    background:var(--accent);
+    width:18px;
+    border-radius:3px;
+  }
+  .tour-dot.done { background:var(--green); }
+
+  .tour-btns {
+    display:flex;
+    gap:8px;
+  }
+  .tour-btn-skip {
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text3);
+    border-radius:9px;
+    transition:.15s;
+  }
+  .tour-btn-skip:hover { color:var(--text2); background:var(--bg3); }
+  .tour-btn-next {
+    padding:9px 18px;
+    font-size:13px;
+    font-weight:800;
+    color:#0d1117;
+    background:linear-gradient(135deg, var(--accent), var(--orange));
+    border-radius:9px;
+    transition:.15s;
+    letter-spacing:0.3px;
+  }
+  .tour-btn-next:hover { filter:brightness(1.08); }
+  .tour-btn-next:active { transform:scale(.97); }
+
   @media (max-width: 720px) {
     .app { padding:14px 12px 110px; }
     .summary { grid-template-columns:1fr 1fr; gap:8px; }
@@ -1155,6 +1342,7 @@
     .wallet-value { font-size:34px; }
     .wallet-card { padding:18px; }
     .wallet-breakdown { font-size:12px; }
+    #tourTooltip { max-width:calc(100vw - 32px); }
   }
 </style>
 </head>
@@ -1191,26 +1379,19 @@
       <div>Финансы</div>
     </div>
     <div class="header-actions">
+      <button class="icon-btn help" id="helpBtn" title="Показать тур">❓</button>
       <button class="icon-btn" id="themeBtn" title="Тема">🌙</button>
       <button class="icon-btn" id="settingsBtn" title="Настройки">⚙️</button>
     </div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" data-tab="overview">
-      📊 Обзор
-    </button>
-    <button class="tab" data-tab="goals">
-      🎯 Цели <span class="tab-count" id="goalsCount">0</span>
-    </button>
-    <button class="tab" data-tab="recurring">
-      🔁 Регулярные <span class="tab-count" id="recurringCount">0</span>
-    </button>
+    <button class="tab active" data-tab="overview">📊 Обзор</button>
+    <button class="tab" data-tab="goals">🎯 Цели <span class="tab-count" id="goalsCount">0</span></button>
+    <button class="tab" data-tab="recurring">🔁 Регулярные <span class="tab-count" id="recurringCount">0</span></button>
   </div>
 
-  <!-- TAB: OVERVIEW -->
   <div class="tab-pane active" id="pane-overview">
-    <!-- НОВАЯ КАРТОЧКА «Сейчас в кошельке» -->
     <div class="wallet-card" id="walletCard">
       <div class="wallet-head">
         <div>
@@ -1233,13 +1414,13 @@
       <div class="wallet-hint" id="walletHint">Нажми ✏️ чтобы скорректировать</div>
     </div>
 
-    <div class="month-nav">
+    <div class="month-nav" id="tour-month">
       <button id="prevMonth">←</button>
       <div class="month-label" id="monthLabel">Январь 2025</div>
       <button id="nextMonth">→</button>
     </div>
 
-    <div class="summary">
+    <div class="summary" id="tour-summary">
       <div class="card balance">
         <div class="card-label">Баланс месяца</div>
         <div class="card-value" id="balanceValue">0 ₽</div>
@@ -1258,7 +1439,7 @@
     </div>
 
     <div class="grid-2">
-      <div class="panel compact">
+      <div class="panel compact" id="tour-pie">
         <div class="panel-title">
           <span>Расходы по категориям</span>
           <span class="hint" id="pieHint"></span>
@@ -1269,7 +1450,7 @@
         </div>
         <div class="legend" id="pieLegend"></div>
       </div>
-      <div class="panel compact">
+      <div class="panel compact" id="tour-bars">
         <div class="panel-title">
           <span>Динамика по дням</span>
           <span class="hint">🟢 доход · 🔴 расход</span>
@@ -1280,7 +1461,7 @@
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="tour-budget">
       <div class="panel-title">
         <span>Бюджет на месяц</span>
         <button class="btn-small" id="editBudgetBtn">Изменить</button>
@@ -1291,7 +1472,7 @@
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="tour-list">
       <div class="panel-title">
         <span>Операции</span>
         <span class="hint" id="txCount"></span>
@@ -1307,7 +1488,6 @@
     </div>
   </div>
 
-  <!-- TAB: GOALS -->
   <div class="tab-pane" id="pane-goals">
     <div id="goalsList"></div>
     <div id="goalsEmpty" class="empty-hero" style="display:none;">
@@ -1319,7 +1499,6 @@
     <button class="btn-primary" id="addGoalBtn" style="display:none;">+ Новая цель</button>
   </div>
 
-  <!-- TAB: RECURRING -->
   <div class="tab-pane" id="pane-recurring">
     <div id="recurringList"></div>
     <div id="recurringEmpty" class="empty-hero" style="display:none;">
@@ -1344,22 +1523,18 @@
       <div class="modal-title" id="txModalTitle">Новая операция</div>
       <button class="modal-close" id="txModalClose">✕</button>
     </div>
-
     <div class="type-toggle">
       <button class="type-btn expense active" data-type="expense">↓ Расход</button>
       <button class="type-btn income" data-type="income">↑ Доход</button>
     </div>
-
     <div class="form-group">
       <label class="form-label">Сумма</label>
       <input type="number" class="form-input" id="txAmount" placeholder="0" min="0" step="0.01" inputmode="decimal">
     </div>
-
     <div class="form-group">
       <label class="form-label">Категория</label>
       <div class="cat-grid" id="catGrid"></div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Дата</label>
@@ -1370,38 +1545,32 @@
         <input type="time" class="form-input" id="txTime">
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Заметка</label>
       <input type="text" class="form-input" id="txNote" placeholder="Например, обед с коллегами" maxlength="100">
     </div>
-
     <button class="btn-primary" id="txSave">Сохранить</button>
     <button class="btn-danger" id="txDelete" style="display:none;">Удалить</button>
   </div>
 </div>
 
-<!-- MODAL: Начальный баланс / Корректировка -->
+<!-- MODAL: Balance -->
 <div class="modal-overlay" id="balanceModal">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="balanceModalTitle">Начальный баланс</div>
       <button class="modal-close" id="balanceModalClose">✕</button>
     </div>
-
     <div id="balanceModalDesc" style="font-size:13.5px;color:var(--text2);line-height:1.55;margin-bottom:16px;">
       Укажи, сколько у тебя денег <b>сейчас</b>. Трекер запомнит это как стартовую точку.
     </div>
-
     <div class="form-group">
       <label class="form-label" id="balanceAmountLabel">Сумма</label>
       <input type="number" class="form-input" id="balanceAmount" placeholder="500" step="0.01" inputmode="decimal">
     </div>
-
     <div class="form-hint" id="balanceModalHint" style="margin-bottom:14px;">
       Это не операция, а точка отсчёта. Позже можно править.
     </div>
-
     <button class="btn-primary" id="balanceSave">Сохранить</button>
   </div>
 </div>
@@ -1413,22 +1582,18 @@
       <div class="modal-title" id="goalModalTitle">Новая цель</div>
       <button class="modal-close" id="goalModalClose">✕</button>
     </div>
-
     <div class="form-group">
       <label class="form-label">Название</label>
       <input type="text" class="form-input" id="goalName" placeholder="Например, на отпуск" maxlength="50">
     </div>
-
     <div class="form-group">
       <label class="form-label">Целевая сумма</label>
       <input type="number" class="form-input" id="goalTarget" placeholder="100000" min="0" step="1000" inputmode="decimal">
     </div>
-
     <div class="form-group">
       <label class="form-label">Уже накоплено</label>
       <input type="number" class="form-input" id="goalCurrent" placeholder="0" min="0" step="1000" inputmode="decimal">
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Дедлайн</label>
@@ -1446,31 +1611,27 @@
         </select>
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Сколько откладываю в месяц</label>
       <input type="number" class="form-input" id="goalMonthly" placeholder="15000" min="0" step="500" inputmode="decimal">
       <div class="form-hint">Необязательно. Если укажешь — трекер посчитает, успеешь ли к дедлайну.</div>
     </div>
-
     <button class="btn-primary" id="goalSave">Сохранить</button>
     <button class="btn-danger" id="goalDelete" style="display:none;">Удалить цель</button>
   </div>
 </div>
 
-<!-- MODAL: Deposit to goal -->
+<!-- MODAL: Deposit -->
 <div class="modal-overlay" id="depositModal">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="depositTitle">Добавить к цели</div>
       <button class="modal-close" id="depositClose">✕</button>
     </div>
-
     <div class="form-group">
       <label class="form-label">Сумма</label>
       <input type="number" class="form-input" id="depositAmount" placeholder="5000" min="0" step="100" inputmode="decimal">
     </div>
-
     <div class="form-group">
       <label class="form-label">Что сделать</label>
       <select class="form-select" id="depositAction">
@@ -1478,7 +1639,6 @@
         <option value="sub">Снять (например, потратил)</option>
       </select>
     </div>
-
     <button class="btn-primary" id="depositSave">Применить</button>
   </div>
 </div>
@@ -1490,27 +1650,22 @@
       <div class="modal-title" id="recurringModalTitle">Новая регулярная</div>
       <button class="modal-close" id="recurringModalClose">✕</button>
     </div>
-
     <div class="type-toggle">
       <button class="type-btn expense active" data-rtype="expense">↓ Расход</button>
       <button class="type-btn income" data-rtype="income">↑ Доход</button>
     </div>
-
     <div class="form-group">
       <label class="form-label">Название</label>
       <input type="text" class="form-input" id="recurringName" placeholder="Например, Аренда" maxlength="50">
     </div>
-
     <div class="form-group">
       <label class="form-label">Сумма</label>
       <input type="number" class="form-input" id="recurringAmount" placeholder="30000" min="0" step="100" inputmode="decimal">
     </div>
-
     <div class="form-group">
       <label class="form-label">Категория</label>
       <div class="cat-grid" id="recurringCatGrid"></div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">День месяца</label>
@@ -1521,12 +1676,10 @@
         <input type="month" class="form-input" id="recurringStart">
       </div>
     </div>
-
     <div class="form-hint" style="margin-bottom:14px;">
       Операция будет автоматически добавляться каждый месяц в указанный день.
       Если день больше, чем дней в месяце — используется последний день месяца.
     </div>
-
     <button class="btn-primary" id="recurringSave">Сохранить</button>
     <button class="btn-danger" id="recurringDelete" style="display:none;">Удалить</button>
   </div>
@@ -1588,6 +1741,14 @@
 
     <div class="settings-row">
       <div>
+        <div class="settings-label">Тур по интерфейсу</div>
+        <div class="settings-sub">Пройти обучение заново</div>
+      </div>
+      <button class="btn-small" id="restartTourBtn">Запустить</button>
+    </div>
+
+    <div class="settings-row">
+      <div>
         <div class="settings-label">Экспорт данных</div>
         <div class="settings-sub">Скачать всё в JSON</div>
       </div>
@@ -1628,6 +1789,25 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- TOUR -->
+<div id="tourOverlay">
+  <div id="tourBackdrop"></div>
+  <div id="tourCloneLayer"></div>
+  <div id="tourSpotlight"></div>
+  <div id="tourTooltip">
+    <div class="tour-step-num" id="tourStepNum">ШАГ 1 ИЗ 9</div>
+    <div class="tour-title" id="tourTitle">Заголовок</div>
+    <div class="tour-text" id="tourText">Текст</div>
+    <div class="tour-actions">
+      <div class="tour-progress" id="tourProgress"></div>
+      <div class="tour-btns">
+        <button class="tour-btn-skip" id="tourSkip">Пропустить</button>
+        <button class="tour-btn-next" id="tourNext">Далее →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    КАТЕГОРИИ
@@ -1662,9 +1842,12 @@ function getCategory(type, id) {
 }
 
 /* ============================================================
-   ХРАНИЛИЩЕ
+   ХРАНИЛИЩЕ — ключ v3 (старый), с миграцией из v4
    ============================================================ */
-const STORAGE_KEY = 'finance_tracker_v4';
+const STORAGE_KEY = 'finance_tracker_v3';       // Основной ключ — старый
+const STORAGE_KEY_V4 = 'finance_tracker_v4';     // Из него мигрируем, если есть
+const TOUR_KEY = 'finance_tour_done_v2';
+const WELCOME_KEY = 'finance_welcome_done_v1';
 
 let state = {
   transactions: [],
@@ -1673,23 +1856,40 @@ let state = {
   goals: [],
   recurring: [],
   theme: 'auto',
-  initialBalance: 0,          // начальный баланс
-  initialBalanceSet: false,   // установлен ли (для онбординга)
-  walletMode: 'all',          // 'all' | 'month'
+  initialBalance: 0,
+  initialBalanceSet: false,
+  walletMode: 'all',
   autoCreatedMonths: {},
 };
 
 function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(STORAGE_KEY);
+
+    // Миграция: если в v3 пусто, но есть в v4 — переносим в v3
+    if (!raw) {
+      const rawV4 = localStorage.getItem(STORAGE_KEY_V4);
+      if (rawV4) {
+        localStorage.setItem(STORAGE_KEY, rawV4);
+        raw = rawV4;
+      }
+    }
+
     if (raw) {
       const parsed = JSON.parse(raw);
       state = { ...state, ...parsed };
+      // Догружаем недостающие поля (если данные из старого формата)
       if (!state.goals) state.goals = [];
       if (!state.recurring) state.recurring = [];
       if (!state.autoCreatedMonths) state.autoCreatedMonths = {};
       if (typeof state.initialBalance !== 'number') state.initialBalance = 0;
+      if (typeof state.initialBalanceSet !== 'boolean') {
+        // Если данных уже были операции — считаем, что баланс установлен
+        state.initialBalanceSet = state.transactions.length > 0;
+      }
       if (typeof state.walletMode !== 'string') state.walletMode = 'all';
+      if (!state.currency) state.currency = '₽';
+      if (!state.theme) state.theme = 'auto';
     }
   } catch(e) { console.error('Load error', e); }
 }
@@ -1783,7 +1983,6 @@ function escapeHtml(s) {
    РАСЧЁТ БАЛАНСА
    ============================================================ */
 function getAllTimeBalance() {
-  // Начальный + все доходы − все расходы (за всё время)
   let income = 0, expense = 0;
   state.transactions.forEach(t => {
     if (t.type === 'income') income += t.amount;
@@ -1798,7 +1997,6 @@ function getAllTimeBalance() {
 }
 
 function getMonthBalance() {
-  // Начальный + доходы месяца − расходы месяца
   const list = getMonthTransactions();
   let income = 0, expense = 0;
   list.forEach(t => {
@@ -1918,7 +2116,6 @@ function renderWallet() {
   document.getElementById('walletHint').textContent =
     `Показано ${modeLabel}. Нажми ✏️ чтобы скорректировать.`;
 
-  // Кнопки режима
   document.querySelectorAll('.wallet-mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === state.walletMode);
   });
@@ -2433,6 +2630,9 @@ function saveTransaction() {
     toast('Операция добавлена', 'success');
   }
 
+  // Если баланс не установлен — помечаем как установленный
+  if (!state.initialBalanceSet) state.initialBalanceSet = true;
+
   save();
   closeModal('txModal');
   renderAll();
@@ -2449,13 +2649,12 @@ function deleteTransaction() {
 }
 
 /* ============================================================
-   МОДАЛКА: Баланс (начальный + корректировка)
+   МОДАЛКА: Баланс
    ============================================================ */
-let balanceMode = 'initial'; // 'initial' | 'correct'
+let balanceMode = 'initial';
 
 function openBalanceModal(mode = 'initial') {
   balanceMode = mode;
-  const modal = document.getElementById('balanceModal');
 
   if (mode === 'initial') {
     document.getElementById('balanceModalTitle').textContent = 'Начальный баланс';
@@ -2466,7 +2665,6 @@ function openBalanceModal(mode = 'initial') {
       'Это не операция — просто стартовая сумма. Позже можно править.';
     document.getElementById('balanceAmount').value = state.initialBalance || '';
   } else {
-    // Корректировка — вводишь РЕАЛЬНУЮ сумму сейчас, трекер пересчитывает initialBalance
     const current = state.walletMode === 'month'
       ? getMonthBalance().total
       : getAllTimeBalance().total;
@@ -2499,12 +2697,7 @@ function saveBalance() {
     renderAll();
     toast('Начальный баланс сохранён', 'success');
   } else {
-    // Корректировка: считаем, какой должен быть initialBalance,
-    // чтобы текущий баланс стал равен val
     const data = state.walletMode === 'month' ? getMonthBalance() : getAllTimeBalance();
-    // total = initial + income - expense
-    // Хотим: val = newInitial + income - expense
-    // => newInitial = val - income + expense
     const newInitial = val - data.income + data.expense;
     state.initialBalance = newInitial;
     state.initialBalanceSet = true;
@@ -2822,6 +3015,10 @@ function importJSON(file) {
       if (!data.transactions) throw new Error('Неверный формат');
       if (!confirm(`Импортировать ${data.transactions.length} операций? Текущие данные будут заменены.`)) return;
       state = { ...state, ...data };
+      if (!state.goals) state.goals = [];
+      if (!state.recurring) state.recurring = [];
+      if (!state.autoCreatedMonths) state.autoCreatedMonths = {};
+      if (typeof state.initialBalance !== 'number') state.initialBalance = 0;
       save();
       applyRecurringForMonth(viewYear, viewMonth);
       renderAll();
@@ -2924,13 +3121,251 @@ function switchTab(tabName) {
 }
 
 /* ============================================================
+   ТУТОРИАЛ
+   ============================================================ */
+const TOUR_STEPS = [
+  {
+    selector: '#walletCard',
+    title: 'Сейчас в кошельке',
+    text: 'Главная карточка — сколько у тебя денег <b>прямо сейчас</b>. Считается как стартовый баланс + все доходы − все расходы. Обновляется автоматически при каждой операции.',
+    position: 'bottom',
+  },
+  {
+    selector: '#walletMode',
+    title: 'Режимы просмотра',
+    text: 'Переключай между <b>«За всё время»</b> (полный остаток) и <b>«За месяц»</b> (сколько пришло и ушло в этом месяце). Полезно, если хочешь видеть только текущий период.',
+    position: 'bottom',
+  },
+  {
+    selector: '#tour-summary',
+    title: 'Сводка месяца',
+    text: 'Здесь видно: <b>баланс месяца</b>, <b>сколько заработал</b> и <b>сколько потратил</b>. Обновляется при каждой операции.',
+    position: 'bottom',
+  },
+  {
+    selector: '#tour-month',
+    title: 'Переключение месяцев',
+    text: 'Стрелками <b>листаешь месяцы</b>. Хочешь посмотреть, сколько потратил в прошлом месяце — просто нажми ←.',
+    position: 'bottom',
+  },
+  {
+    selector: '#addBtn',
+    title: 'Добавить операцию',
+    text: 'Главная кнопка. Нажми <span class="accent">+ Добавить</span>, чтобы записать расход или доход. Всё остальное — вторично.',
+    position: 'top',
+  },
+  {
+    selector: '#tour-pie',
+    title: 'Куда уходят деньги',
+    text: 'Диаграмма показывает <b>расходы по категориям</b>: еда, транспорт, развлечения. Сразу видно, на что уходит больше всего.',
+    position: 'bottom',
+  },
+  {
+    selector: '#tour-bars',
+    title: 'Динамика по дням',
+    text: 'Столбики по дням месяца. <b>Зелёные</b> — доходы, <b>красные</b> — расходы. Помогает заметить, в какие дни тратишь больше.',
+    position: 'bottom',
+  },
+  {
+    selector: '#tour-budget',
+    title: 'Бюджет',
+    text: 'Задай <b>лимит на категорию</b> — например, «на еду 20 000 в месяц». Трекер покажет, сколько уже потрачено, и подсветит, если превысил.',
+    position: 'top',
+  },
+  {
+    selector: '#tour-list',
+    title: 'Список операций',
+    text: 'Все твои записи за месяц. <b>Фильтры сверху</b> — только доходы, только расходы, за сегодня или за неделю. Нажми на любую — можно редактировать.',
+    position: 'top',
+  },
+];
+
+let tourStep = 0;
+let tourActive = false;
+
+function startTour() {
+  showApp();
+  tourActive = true;
+  tourStep = 0;
+  document.getElementById('tourOverlay').classList.add('active');
+  setTimeout(() => showTourStep(0), 100);
+}
+
+function showTourStep(index) {
+  if (index < 0) index = 0;
+  if (index >= TOUR_STEPS.length) {
+    endTour();
+    return;
+  }
+  tourStep = index;
+  const step = TOUR_STEPS[index];
+  const target = document.querySelector(step.selector);
+
+  if (!target) {
+    showTourStep(index + 1);
+    return;
+  }
+
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  setTimeout(() => {
+    const rect = target.getBoundingClientRect();
+    const padding = 10;
+
+    const backdrop = document.getElementById('tourBackdrop');
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const x1 = rect.left - padding;
+    const y1 = rect.top - padding;
+    const x2 = rect.right + padding;
+    const y2 = rect.bottom + padding;
+
+    backdrop.style.clipPath = `
+      polygon(
+        0 0, 0 ${h}px, ${w}px ${h}px, ${w}px 0, 0 0,
+        ${x1}px ${y1}px, ${x1}px ${y2}px,
+        ${x2}px ${y2}px, ${x2}px ${y1}px, ${x1}px ${y1}px
+      )
+    `;
+
+    const cloneLayer = document.getElementById('tourCloneLayer');
+    cloneLayer.innerHTML = '';
+
+    const clonedEl = target.cloneNode(true);
+    clonedEl.classList.add('tour-clone');
+    clonedEl.style.position = 'absolute';
+    clonedEl.style.left = rect.left + 'px';
+    clonedEl.style.top = rect.top + 'px';
+    clonedEl.style.width = rect.width + 'px';
+    clonedEl.style.height = rect.height + 'px';
+    clonedEl.style.margin = '0';
+    clonedEl.style.transform = 'none';
+
+    cloneLayer.appendChild(clonedEl);
+
+    const spot = document.getElementById('tourSpotlight');
+    spot.classList.add('show');
+    spot.style.left = (rect.left - padding) + 'px';
+    spot.style.top = (rect.top - padding) + 'px';
+    spot.style.width = (rect.width + padding * 2) + 'px';
+    spot.style.height = (rect.height + padding * 2) + 'px';
+
+    const tooltip = document.getElementById('tourTooltip');
+    document.getElementById('tourStepNum').textContent = `ШАГ ${index + 1} ИЗ ${TOUR_STEPS.length}`;
+    document.getElementById('tourTitle').textContent = step.title;
+    document.getElementById('tourText').innerHTML = step.text;
+
+    document.getElementById('tourProgress').innerHTML = TOUR_STEPS.map((_, i) =>
+      `<div class="tour-dot ${i === index ? 'active' : (i < index ? 'done' : '')}"></div>`
+    ).join('');
+
+    document.getElementById('tourNext').textContent =
+      index === TOUR_STEPS.length - 1 ? 'Готово ✓' : 'Далее →';
+
+    tooltip.classList.remove('arrow-top','arrow-bottom','arrow-left','arrow-right');
+    tooltip.style.visibility = 'hidden';
+
+    requestAnimationFrame(() => {
+      const tooltipW = 340;
+      const tooltipH = tooltip.offsetHeight || 200;
+      const margin = 20;
+      const vw = w;
+      const vh = h;
+
+      const spaceBelow = vh - rect.bottom - margin;
+      const spaceAbove = rect.top - margin;
+      const spaceRight = vw - rect.right - margin;
+      const spaceLeft = rect.left - margin;
+
+      const elementWidthRatio = rect.width / vw;
+      const elementHeightRatio = rect.height / vh;
+
+      let tx, ty, arrow = '';
+
+      if (elementWidthRatio > 0.55) {
+        const centerY = rect.top + rect.height / 2 - tooltipH / 2;
+        const clampedY = Math.max(16, Math.min(vh - tooltipH - 16, centerY));
+
+        if (spaceRight >= tooltipW + margin) {
+          tx = rect.right + margin;
+          ty = clampedY;
+        } else if (spaceLeft >= tooltipW + margin) {
+          tx = rect.left - tooltipW - margin;
+          ty = clampedY;
+        } else if (spaceBelow >= tooltipH + margin) {
+          tx = Math.max(16, vw - tooltipW - 16);
+          ty = rect.bottom + margin;
+          arrow = 'arrow-top';
+        } else if (spaceAbove >= tooltipH + margin) {
+          tx = Math.max(16, vw - tooltipW - 16);
+          ty = rect.top - tooltipH - margin;
+          arrow = 'arrow-bottom';
+        } else {
+          tx = Math.max(16, vw - tooltipW - 16);
+          ty = Math.max(16, vh - tooltipH - 16);
+        }
+      } else {
+        if (step.position === 'bottom' && spaceBelow >= tooltipH + margin) {
+          tx = Math.max(16, Math.min(vw - tooltipW - 16, rect.left + rect.width/2 - tooltipW/2));
+          ty = rect.bottom + margin;
+          arrow = 'arrow-top';
+        } else if (step.position === 'top' && spaceAbove >= tooltipH + margin) {
+          tx = Math.max(16, Math.min(vw - tooltipW - 16, rect.left + rect.width/2 - tooltipW/2));
+          ty = rect.top - tooltipH - margin;
+          arrow = 'arrow-bottom';
+        } else if (spaceBelow >= tooltipH + margin) {
+          tx = Math.max(16, Math.min(vw - tooltipW - 16, rect.left + rect.width/2 - tooltipW/2));
+          ty = rect.bottom + margin;
+          arrow = 'arrow-top';
+        } else if (spaceAbove >= tooltipH + margin) {
+          tx = Math.max(16, Math.min(vw - tooltipW - 16, rect.left + rect.width/2 - tooltipW/2));
+          ty = rect.top - tooltipH - margin;
+          arrow = 'arrow-bottom';
+        } else if (spaceRight >= tooltipW + margin) {
+          tx = rect.right + margin;
+          ty = Math.max(16, Math.min(vh - tooltipH - 16, rect.top + rect.height/2 - tooltipH/2));
+        } else if (spaceLeft >= tooltipW + margin) {
+          tx = rect.left - tooltipW - margin;
+          ty = Math.max(16, Math.min(vh - tooltipH - 16, rect.top + rect.height/2 - tooltipH/2));
+        } else {
+          tx = Math.max(16, vw - tooltipW - 16);
+          ty = Math.max(16, vh - tooltipH - 16);
+        }
+      }
+
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.style.width = tooltipW + 'px';
+      if (arrow) tooltip.classList.add(arrow);
+      tooltip.style.visibility = '';
+    });
+  }, 400);
+}
+
+function nextTourStep() {
+  if (tourStep >= TOUR_STEPS.length - 1) {
+    endTour();
+  } else {
+    showTourStep(tourStep + 1);
+  }
+}
+
+function endTour() {
+  tourActive = false;
+  document.getElementById('tourOverlay').classList.remove('active');
+  document.getElementById('tourSpotlight').classList.remove('show');
+  document.getElementById('tourCloneLayer').innerHTML = '';
+  document.getElementById('tourBackdrop').style.clipPath = '';
+  localStorage.setItem(TOUR_KEY, '1');
+}
+
+/* ============================================================
    СОБЫТИЯ
    ============================================================ */
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 });
 
-// Wallet mode switching
 document.getElementById('walletMode').addEventListener('click', e => {
   const btn = e.target.closest('.wallet-mode-btn');
   if (!btn) return;
@@ -2940,16 +3375,13 @@ document.getElementById('walletMode').addEventListener('click', e => {
   renderWallet();
 });
 
-// Wallet edit
 document.getElementById('walletEdit').addEventListener('click', e => {
   e.stopPropagation();
   openBalanceModal('correct');
 });
 
-// Wallet card click (whole card opens initial balance if not set yet)
 document.getElementById('walletCard').addEventListener('click', e => {
   if (e.target.closest('.wallet-mode-btn') || e.target.closest('.wallet-edit')) return;
-  // Клик по карточке → корректировка
   openBalanceModal('correct');
 });
 
@@ -2984,28 +3416,24 @@ document.getElementById('txAmount').addEventListener('keydown', e => {
   if (e.key === 'Enter') saveTransaction();
 });
 
-// Balance modal
 document.getElementById('balanceModalClose').addEventListener('click', () => closeModal('balanceModal'));
 document.getElementById('balanceSave').addEventListener('click', saveBalance);
 document.getElementById('balanceAmount').addEventListener('keydown', e => {
   if (e.key === 'Enter') saveBalance();
 });
 
-// Goals
 document.getElementById('addGoalBtn').addEventListener('click', () => openGoalModal());
 document.getElementById('addGoalBtnEmpty').addEventListener('click', () => openGoalModal());
 document.getElementById('goalModalClose').addEventListener('click', () => closeModal('goalModal'));
 document.getElementById('goalSave').addEventListener('click', saveGoal);
 document.getElementById('goalDelete').addEventListener('click', deleteGoal);
 
-// Deposit
 document.getElementById('depositClose').addEventListener('click', () => closeModal('depositModal'));
 document.getElementById('depositSave').addEventListener('click', saveDeposit);
 document.getElementById('depositAmount').addEventListener('keydown', e => {
   if (e.key === 'Enter') saveDeposit();
 });
 
-// Recurring
 document.getElementById('addRecurringBtn').addEventListener('click', () => openRecurringModal());
 document.getElementById('addRecurringBtnEmpty').addEventListener('click', () => openRecurringModal());
 document.getElementById('recurringModalClose').addEventListener('click', () => closeModal('recurringModal'));
@@ -3021,12 +3449,10 @@ document.querySelectorAll('.type-btn[data-rtype]').forEach(btn => {
   });
 });
 
-// Budget
 document.getElementById('editBudgetBtn').addEventListener('click', openBudgetModal);
 document.getElementById('budgetModalClose').addEventListener('click', () => closeModal('budgetModal'));
 document.getElementById('budgetSave').addEventListener('click', saveBudget);
 
-// Settings
 document.getElementById('settingsBtn').addEventListener('click', openSettingsModal);
 document.getElementById('settingsModalClose').addEventListener('click', () => closeModal('settingsModal'));
 document.getElementById('exportBtn').addEventListener('click', exportJSON);
@@ -3053,7 +3479,6 @@ document.getElementById('currencySelect').addEventListener('change', e => {
   renderRecurring();
 });
 
-// Theme
 document.getElementById('themeBtn').addEventListener('click', () => {
   const cur = state.theme || 'auto';
   state.theme = cur === 'auto' ? 'light' : cur === 'light' ? 'dark' : 'auto';
@@ -3074,7 +3499,6 @@ document.querySelectorAll('.theme-opt').forEach(btn => {
   });
 });
 
-// Filters
 document.querySelectorAll('.filter-chip').forEach(chip => {
   chip.addEventListener('click', () => {
     currentFilter = chip.dataset.filter;
@@ -3084,7 +3508,6 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
   });
 });
 
-// Modal overlay close
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.classList.remove('active');
@@ -3093,13 +3516,35 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    if (tourActive) { endTour(); return; }
     document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  }
+  if (tourActive) {
+    if (e.key === 'ArrowRight' || e.key === 'Enter') nextTourStep();
   }
 });
 
 document.getElementById('welcomeStart').addEventListener('click', () => {
   showApp();
   setTimeout(() => openBalanceModal('initial'), 100);
+});
+
+// Tour
+document.getElementById('helpBtn').addEventListener('click', startTour);
+document.getElementById('restartTourBtn').addEventListener('click', () => {
+  closeModal('settingsModal');
+  setTimeout(startTour, 200);
+});
+document.getElementById('tourNext').addEventListener('click', nextTourStep);
+document.getElementById('tourSkip').addEventListener('click', endTour);
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    renderPieChart();
+    if (tourActive) showTourStep(tourStep);
+  }, 150);
 });
 
 /* ============================================================
@@ -3110,13 +3555,12 @@ initViewDate();
 applyTheme();
 
 // Показываем welcome, если данных нет И баланс не установлен
-if (state.transactions.length === 0 && !state.initialBalanceSet) {
+if (state.transactions.length === 0 && !state.initialBalanceSet && state.goals.length === 0 && state.recurring.length === 0) {
   showWelcome();
 } else {
   showApp();
 }
 
-// Подставляем регулярные за текущий месяц
 applyRecurringForMonth(viewYear, viewMonth);
 
 renderAll();
@@ -3125,6 +3569,11 @@ renderRecurring();
 
 document.getElementById('goalsCount').textContent = state.goals.length;
 document.getElementById('recurringCount').textContent = state.recurring.length;
+
+// Автозапуск тура при первом входе
+if (!localStorage.getItem(TOUR_KEY) && state.initialBalanceSet) {
+  setTimeout(() => startTour(), 800);
+}
 </script>
 </body>
 </html>
